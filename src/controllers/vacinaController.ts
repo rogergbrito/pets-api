@@ -1,10 +1,12 @@
-const { Vacina: VacinaModel } = require('../models/Vacina');
+import { Request, Response } from 'express';
+import { Vacina as VacinaModel, vacinaSchema } from '../models/Vacina'; // Assuming the Vacina model is defined in a separate file
+import { VacinaInterface } from '../interfaces/vacinas-interface';
 
 const vacinaController = {
 
-  create: async(req, res) => {
+  create: async(req: Request, res: Response) => {
     try {
-      const vacina = {
+      const vacina: VacinaInterface = {
         name: req.body.name,
         vaccineDate: req.body.vaccineDate
       };
@@ -17,7 +19,7 @@ const vacinaController = {
     }
   },
 
-  getAll: async (req, res) => {
+  getAll: async (req: Request, res: Response) => {
     try {
         const vacinas = await VacinaModel.find();
 
@@ -27,9 +29,9 @@ const vacinaController = {
     }
   },
 
-  get: async (req, res) => {
+  get: async (req: Request, res: Response) => {
     try {
-      const id = req.params.id
+      const id = req.params.id;
       const vacina = await VacinaModel.findById(id);
 
       if(!vacina) {
@@ -44,7 +46,7 @@ const vacinaController = {
     }
   },
 
-  delete: async(req, res) => {
+  delete: async(req: Request, res: Response) => {
     try {
       const id = req.params.id;
       const vacina = await VacinaModel.findById(id);
@@ -56,31 +58,31 @@ const vacinaController = {
 
       const deleteVacina = await VacinaModel.findByIdAndDelete(id);
 
-      res.status(200).json({ deletePet, msg: "Vacina excluída com sucesso." })
+      res.status(200).json({ deleteVacina, msg: "Vacina excluída com sucesso." })
 
     } catch (error) {
         console.log(error);
     }
   },
 
-  update: async (req, res) => {
+  update: async (req: Request, res: Response) => {
     const id = req.params.id;
 
-    const vacina = {
+    const vacina: VacinaInterface = {
       name: req.body.name,
       vaccineDate: req.body.vaccineDate
     };
 
     const updateVacina = await VacinaModel.findByIdAndUpdate(id, vacina);
 
-    if(!vacina) {
+    if(!updateVacina) {
       res.status(404).json({ msg: "Vacina não encontrada." });
       return;
     }
 
-    res.status(200).json({ pet, msg: "Vacina atualizada com sucesso." });
+    res.status(200).json({ vacina: updateVacina, msg: "Vacina atualizada com sucesso." });
   },
 
 }
 
-module.exports = vacinaController;
+export default vacinaController;
