@@ -5,11 +5,14 @@ interface Vacina extends Document {
   vaccineDate: string;
 }
 
-const vacinaSchema = new Schema<Vacina>({
-  name: { type: String, required: true },
-  vaccineDate: { type: String, required: true },
-}, { timestamps: true });
+const vacinaSchema = new Schema<Vacina>(
+  {
+    name: { type: String, required: true },
+    vaccineDate: { type: String, required: true },
+  },
+  { timestamps: true },
+);
 
-const VacinaModel = mongoose.model<Vacina>("Vacina", vacinaSchema);
+const VacinaModel = mongoose.model<Vacina>('Vacina', vacinaSchema);
 
 export { VacinaModel as Vacina, vacinaSchema };

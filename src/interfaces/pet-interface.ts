@@ -6,5 +6,5 @@ export interface PetInterface {
   image: string;
   description?: string;
   tag: string;
-  vaccines: { name: string, vaccineDate: string }[];
+  vaccines: { name: string; vaccineDate: string }[];
 }
