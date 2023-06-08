@@ -1,6 +1,6 @@
 # API dos Pets
 
-API que realiza um CRUD de pets no banco de dados MongoDB e realiza um envio de e-mail com dados já setados.
+API que realiza um CRUD de pets no banco de dados MongoDB e faz envio de e-mail com dados já setados.
 
 ## Configuração do Ambiente:
 
