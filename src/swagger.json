@@ -53,8 +53,17 @@
                                     "type": "string"
                                   },
                                   "vaccines": {
-                                      "title": "description",
-                                      "type": "array"
+                                      "type": "array",
+                                      "items": {
+                                        "properties": {
+                                          "name": {
+                                          "type": "string"
+                                        },
+                                        "vaccineDate": {
+                                          "type": "string"
+                                        }
+                                      }
+                                    }
                                   }
                               }
                           }
@@ -72,9 +81,69 @@
                               "schema": {
                                   "type": "object",
                                   "properties": {
-                                      "msg": {
+                                    "response": {
+                                      "type": "object",
+                                      "properties": {
+                                        "name": {
                                           "type": "string"
+                                        },
+                                        "race": {
+                                          "type": "string"
+                                        },
+                                        "vaccinated": {
+                                          "type": "boolean"
+                                        },
+                                        "lastVaccineDate": {
+                                          "type": "string"
+                                        },
+                                        "image": {
+                                          "type": "string"
+                                        },
+                                        "description": {
+                                          "type": "string"
+                                        },
+                                        "tag": {
+                                          "type": "string"
+                                        },
+                                        "vaccines": {
+                                          "type": "array",
+                                          "items": {
+                                            "properties": {
+                                              "name": {
+                                              "type": "string"
+                                            },
+                                            "vaccineDate": {
+                                              "type": "string"
+                                            },
+                                            "_id": {
+                                              "type": "string"
+                                            },
+                                            "createdAt": {
+                                              "type": "string"
+                                            },
+                                            "updatedAt": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        }
+                                      },
+                                        "_id": {
+                                          "type": "string"
+                                        },
+                                        "created_at": {
+                                          "type": "string"
+                                        },
+                                        "updatedAt": {
+                                          "type": "string"
+                                        },
+                                        "__v": {
+                                          "type": "number"
+                                        }
                                       }
+                                    },
+                                    "msg": {
+                                      "type": "string"
+                                    }
                                   }
                               }
                           }
@@ -90,49 +159,6 @@
               "tags": [
                   "Pets"
               ],
-              "requestBody": {
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "title": "name",
-                                    "type": "string"
-                                },
-                                "race": {
-                                    "title": "race",
-                                    "type": "string"
-                                },
-                                "vaccinated": {
-                                    "title": "vaccinated",
-                                    "type": "boolean"
-                                },
-                                "lastVaccineDate": {
-                                  "title": "lastVaccineDate",
-                                  "type": "string"
-                                },
-                                "image": {
-                                    "title": "image",
-                                    "type": "string"
-                                },
-                                "description": {
-                                    "title": "description",
-                                    "type": "string"
-                                },
-                                "tag": {
-                                  "title": "tag",
-                                  "type": "string"
-                                },
-                                "vaccines": {
-                                    "title": "description",
-                                    "type": "array"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
             "responses": {
                   "500": {
                       "description": "Internal Server Error"
@@ -191,12 +217,22 @@
               }
           }
       },
-      "/pets/:id": {
+      "/pets/{id}": {
           "get": {
               "summary": "Buscar pet por id",
               "description": "Busca um pet passado por id no path",
               "tags": [
                   "Pets"
+              ],
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
               ],
               "responses": {
                   "500": {
@@ -219,55 +255,96 @@
                     }
                 },
                   "200": {
-                        "description": "OK",
-                        "properties": {
-                            "_id": {
-                              "type": "string"
-                            },
-                            "name": {
-                              "type": "string"
-                            },
-                            "race": {
-                              "type": "string"
-                            },
-                            "vaccinated": {
-                              "type": "boolean"
-                            },
-                            "lastVaccineDate": {
-                              "type": "string"
-                            },
-                            "image": {
-                              "type": "string"
-                            },
-                            "description": {
-                              "type": "string"
-                            },
-                            "tag": {
-                              "type": "string"
-                            },
-                            "vaccines": {
-                              "type": "array"
-                            },
-                            "created_at": {
-                              "type": "string"
-                            },
-                            "updatedAt": {
-                              "type": "string"
-                            },
-                            "__v": {
-                              "type": "number"
-                            }
+                    "description": "OK",
+                    "content": {
+                      "application/json": {
+                          "schema": {
+                              "type": "object",
+                              "properties": {
+                                  "pet": {
+                                      "type": "object",
+                                      "properties": {
+                                        "_id": {
+                                          "type": "string"
+                                        },
+                                        "name": {
+                                          "type": "string"
+                                        },
+                                        "race": {
+                                          "type": "string"
+                                        },
+                                        "vaccinated": {
+                                          "type": "boolean"
+                                        },
+                                        "lastVaccineDate": {
+                                          "type": "string"
+                                        },
+                                        "image": {
+                                          "type": "string"
+                                        },
+                                        "description": {
+                                          "type": "string"
+                                        },
+                                        "tag": {
+                                          "type": "string"
+                                        },
+                                        "vaccines": {
+                                          "type": "array",
+                                          "items": {
+                                            "properties": {
+                                              "name": {
+                                              "type": "string"
+                                            },
+                                            "vaccineDate": {
+                                              "type": "string"
+                                            },
+                                            "_id": {
+                                              "type": "string"
+                                            },
+                                            "createdAt": {
+                                              "type": "string"
+                                            },
+                                            "updatedAt": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        }
+                                        },
+                                        "created_at": {
+                                          "type": "string"
+                                        },
+                                        "updatedAt": {
+                                          "type": "string"
+                                        },
+                                        "__v": {
+                                          "type": "number"
+                                        }
+                                      }
+                                  }
+                              }
                           }
+                      }
+                  }
                     }
               }
           }
       },
-      "/pets/:id ": {
+      "/pets/{id} ": {
           "delete": {
               "summary": "Apagar um pet",
               "description": "Apaga um pet na base.",
               "tags": [
                   "Pets"
+              ],
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
               ],
               "responses": {
                   "500": {
@@ -308,12 +385,22 @@
               }
           }
       },
-      "/pets/:id  ": {
-          "post": {
+      "/pets/{id}  ": {
+          "put": {
               "summary": "Atualizar pet",
               "description": "Atualiza um pet na base.",
               "tags": [
                   "Pets"
+              ],
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
               ],
               "requestBody": {
                   "content": {
@@ -350,9 +437,18 @@
                                   "type": "string"
                                 },
                                 "vaccines": {
-                                    "title": "description",
-                                    "type": "array"
-                                }
+                                      "type": "array",
+                                      "items": {
+                                        "properties": {
+                                          "name": {
+                                          "type": "string"
+                                        },
+                                          "vaccineDate": {
+                                            "type": "string"
+                                          }
+                                      }
+                                    }
+                                  }
                             }
                           }
                       }
@@ -413,7 +509,26 @@
                                           "type": "string"
                                         },
                                         "vaccines": {
-                                          "type": "array"
+                                          "type": "array",
+                                          "items": {
+                                            "properties": {
+                                              "name": {
+                                              "type": "string"
+                                            },
+                                            "vaccineDate": {
+                                              "type": "string"
+                                            },
+                                            "_id": {
+                                              "type": "string"
+                                            },
+                                            "createdAt": {
+                                              "type": "string"
+                                            },
+                                            "updatedAt": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        }
                                         },
                                         "created_at": {
                                           "type": "string"
