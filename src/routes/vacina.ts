@@ -1,12 +1,15 @@
 import { Router } from 'express';
 import { Request, Response } from 'express';
 import vacinaController from '../controllers/vacinaController';
+import { verifyToken } from '../middlewares/auth';
 
 const router = Router();
 
 router
   .route('/vacinas')
-  .post((req: Request, res: Response) => vacinaController.create(req, res));
+  .post(verifyToken, (req: Request, res: Response) =>
+    vacinaController.create(req, res),
+  );
 
 router
   .route('/vacinas')
@@ -18,10 +21,14 @@ router
 
 router
   .route('/vacinas/:id')
-  .delete((req: Request, res: Response) => vacinaController.delete(req, res));
+  .delete(verifyToken, (req: Request, res: Response) =>
+    vacinaController.delete(req, res),
+  );
 
 router
   .route('/vacinas/:id')
-  .put((req: Request, res: Response) => vacinaController.update(req, res));
+  .put(verifyToken, (req: Request, res: Response) =>
+    vacinaController.update(req, res),
+  );
 
 export default router;
