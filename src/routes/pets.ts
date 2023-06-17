@@ -1,12 +1,15 @@
 import { Router } from 'express';
 import { Request, Response } from 'express';
 import petController from '../controllers/petController';
+import { verifyToken } from '../middlewares/auth';
 
 const router = Router();
 
 router
   .route('/pets')
-  .post((req: Request, res: Response) => petController.create(req, res));
+  .post(verifyToken, (req: Request, res: Response) =>
+    petController.create(req, res),
+  );
 
 router
   .route('/pets')
@@ -18,10 +21,14 @@ router
 
 router
   .route('/pets/:id')
-  .delete((req: Request, res: Response) => petController.delete(req, res));
+  .delete(verifyToken, (req: Request, res: Response) =>
+    petController.delete(req, res),
+  );
 
 router
   .route('/pets/:id')
-  .put((req: Request, res: Response) => petController.update(req, res));
+  .put(verifyToken, (req: Request, res: Response) =>
+    petController.update(req, res),
+  );
 
 export default router;
