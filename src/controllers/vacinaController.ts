@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { Vacina as VacinaModel } from '../models/Vacina'; // Assuming the Vacina model is defined in a separate file
+import { Vacina as VacinaModel } from '../models/Vacina';
 import { VacinaInterface } from '../interfaces/vacinas-interface';
 
 const vacinaController = {

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { PetModel } from '../models/Pet'; // Assuming the Pet model is defined in a separate file
+import { PetModel } from '../models/Pet';
 import { PetInterface } from '../interfaces/pet-interface';
 
 const petController = {
