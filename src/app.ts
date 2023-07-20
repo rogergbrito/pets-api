@@ -5,6 +5,9 @@ import swaggerDocument from './swagger.json';
 import { Application } from 'express';
 import conn from './db/conn';
 import routes from './routes/router';
+import { createClient } from 'redis';
+
+export const client = createClient(); // inserimos a porta padrão(6379) no docker, então não precisa passar
 
 const app: Application = express();
 const port = 3000;
@@ -18,6 +21,11 @@ conn();
 app.use('/api', routes);
 app.use('/doc/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.listen(port, () => {
-  console.log('Servidor online, rodando na porta ' + port);
-});
+const startup = async () => {
+  await client.connect();
+  app.listen(port, () => {
+    console.log('Servidor online, rodando na porta ' + port);
+  });
+};
+
+startup();

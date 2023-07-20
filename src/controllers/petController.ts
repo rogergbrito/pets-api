@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { PetModel } from '../models/Pet';
 import { PetInterface } from '../interfaces/pet-interface';
+import { client } from '../app';
 
 const petController = {
   create: async (req: Request, res: Response) => {
@@ -26,9 +27,15 @@ const petController = {
 
   getAll: async (req: Request, res: Response) => {
     try {
-      const pets = await PetModel.find({}, 'name race vaccinated image tag');
+      const petsFromCache = await client.get('getAllPets');
 
-      res.json(pets);
+      if (petsFromCache) {
+        return res.status(200).json(JSON.parse(petsFromCache));
+      }
+
+      const pets = await PetModel.find({}, 'name race vaccinated image tag');
+      await client.set('getAllPets', JSON.stringify(pets), { EX: 10 });
+      return res.status(200).json(pets);
     } catch (error) {
       console.log(error);
     }
