@@ -17,9 +17,12 @@ const petController = {
         vaccines: req.body.vaccines,
       };
 
+      await client.del('getAllPets');
       const response = await PetModel.create(pet);
 
-      res.status(201).json({ response, msg: 'Pet cadastrado com sucesso!' });
+      return res
+        .status(201)
+        .json({ response, msg: 'Pet cadastrado com sucesso!' });
     } catch (error) {
       console.log(error);
     }
@@ -34,7 +37,7 @@ const petController = {
       }
 
       const pets = await PetModel.find({}, 'name race vaccinated image tag');
-      await client.set('getAllPets', JSON.stringify(pets), { EX: 10 });
+      await client.set('getAllPets', JSON.stringify(pets), { EX: 60 });
       return res.status(200).json(pets);
     } catch (error) {
       console.log(error);
@@ -44,6 +47,12 @@ const petController = {
   get: async (req: Request, res: Response) => {
     try {
       const id = req.params.id;
+      const petByIdFromCache = await client.get(`pet-${id}`);
+
+      if (petByIdFromCache) {
+        return res.status(200).json(JSON.parse(petByIdFromCache));
+      }
+
       const pet = await PetModel.findById(id);
 
       if (!pet) {
@@ -51,7 +60,9 @@ const petController = {
         return;
       }
 
-      res.json(pet);
+      await client.set(`pet-${id}`, JSON.stringify(pet), { EX: 60 });
+
+      return res.status(200).json(pet);
     } catch (error) {
       console.log(error);
     }
@@ -63,13 +74,15 @@ const petController = {
       const pet = await PetModel.findById(id);
 
       if (!pet) {
-        res.status(404).json({ msg: 'Pet não encontrado.' });
-        return;
+        return res.status(404).json({ msg: 'Pet não encontrado.' });
       }
 
+      await client.del('getAllPets');
       const deletePet = await PetModel.findByIdAndDelete(id);
 
-      res.status(200).json({ deletePet, msg: 'Pet excluído com sucesso.' });
+      return res
+        .status(200)
+        .json({ deletePet, msg: 'Pet excluído com sucesso.' });
     } catch (error) {
       console.log(error);
     }
@@ -89,14 +102,14 @@ const petController = {
       vaccines: req.body.vaccines,
     };
 
+    await client.del('getAllPets');
     const updatePet = await PetModel.findByIdAndUpdate(id, pet);
 
     if (!updatePet) {
-      res.status(404).json({ msg: 'Pet não encontrado.' });
-      return;
+      return res.status(404).json({ msg: 'Pet não encontrado.' });
     }
 
-    res
+    return res
       .status(200)
       .json({ pet: updatePet, msg: 'Pet atualizado com sucesso.' });
   },
